@@ -1,33 +1,40 @@
-const app = require('express').Router();
-const bcrypt = require("bcrypt");   
-const {candidateSchema, adminSchema, q10Schema, q20Schema,q30Schema} = require("./config.js");
-app.use(express.static(__dirname));
-app.get("/", (req, res) => {
-    res.sendFile(__dirname + "login.jsx");
-});
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + "register.jsx");
-});
-app.post('/marks10', (req, res) => {
-   const questions = {
-    quest: req.body.quest,
-    option1: req.body.option1,
-    option2: req.body.option2,
-    option3: req.body.option3,
-    option4: req.body.option4,
-    answer: req.body.answer
-   };
-    const newQ10 = new q10Schema(questions);
-    newQ10.save()
-    .then(()=> {
+// const app = require('express').Router();
+// const bcrypt = require("bcrypt");   
+// const {candidateSchema, adminSchema, q10Schema, q20Schema,q30Schema} = require("./config.js");
+// app.use(express.static(__dirname));
+const express = require('express');
+const router = express.Router();
+const bcrypt = require("bcrypt");
+const { candidateSchema, adminSchema, q10Schema, q20Schema, q30Schema } = require("./config.js");
+const path = require('path');
+// router.use(express.static(__dirname));
+// router.get("/", (req, res) => {
+//     res.sendFile(__dirname + "login.jsx");
+// });
+// router.get('/register', (req, res) => {
+//     res.sendFile(__dirname + "register.jsx");
+// });
+router.post('/marks10', async (req, res) => {
+    try {
+        const questions = {
+            question: req.body.quest,
+            option1: req.body.option1,
+            option2: req.body.option2,
+            option3: req.body.option3,
+            option4: req.body.option4,
+            answer: req.body.answer
+        };
+
+        const newQ10 = new q10Schema(questions);
+        await newQ10.save();
         res.send("Question added successfully");
-    })
-    .catch(()=> {
-        res.send("Error in adding question");
-    });
-  
+    } catch (error) {
+        console.error("Error adding question:", error);
+        res.status(500).send("Error in adding question: " + error.message);
+    }
 });
-app.post('/q20/:q20/:option1/:option2/:option3/:option4/:answer', (req, res) => {
+
+router.post('/marks20', (req, res) => {
    const questions ={
     quest: req.body.quest,
     option1: req.body.option1,
@@ -46,7 +53,7 @@ app.post('/q20/:q20/:option1/:option2/:option3/:option4/:answer', (req, res) => 
     });
    
 });
-app.post('/q30/:q30/:option1/:option2/:option3/:option4/:answer', (req, res) => {   
+router.post('/marks30', (req, res) => {   
     const questions = {
     quest: req.body.quest,
     option1: req.body.option1,
@@ -64,15 +71,16 @@ app.post('/q30/:q30/:option1/:option2/:option3/:option4/:answer', (req, res) => 
         res.send("Error in adding question");
     });
 });
-app.get('/getq10',async(req,res)=>{
+router.get('/getq10',async(req,res)=>{
     const questions = await q10Schema.find();
     res.send(questions);
 })
-app.get('/getq20',async(req,res)=>{
+router.get('/getq20',async(req,res)=>{
     const questions = await q20Schema.find();
     res.send(questions);
 })
-app.get('/getq30',async(req,res)=>{
+router.get('/getq30',async(req,res)=>{
     const questions = await q30Schema.find();
     res.send(questions);
 })
+module.exports = router;

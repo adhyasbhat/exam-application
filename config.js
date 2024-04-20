@@ -30,27 +30,27 @@ const adminSchema = new mongoose.Schema({
 const q10Schema = new mongoose.Schema({
     question:{
         type:String,
-        required:true
+       
     },
     option1:{
         type:String,
-        required:true
+      
     },
     option2:{
         type:String,
-        required:true
+      
     },
     option3:{
         type:String,
-        required:true
+       
     },
     option4:{
         type:String,
-        required:true
+        
     },
     answer:{
         type:String,
-        required:true
+       
     }
 });
 const q20Schema = new mongoose.Schema({
@@ -106,9 +106,16 @@ const q30Schema = new mongoose.Schema({
     }
 });
 
-const Candidate = mongoose.model('Candidate',candidateSchema);
-const Admin = mongoose.model('Admin',adminSchema);
-const Q10 = mongoose.model('Q10',q10Schema);
-const Q20 = mongoose.model('Q20',q20Schema);
-const Q30 = mongoose.model('Q30',q30Schema);
-module.exports = {Candidate,Admin,Q10,Q20,Q30};
+// const Candidate = mongoose.model('Candidate',candidateSchema);
+// const Admin = mongoose.model('Admin',adminSchema);
+// const Q10 = mongoose.model('q10',q10Schema);
+// const Q20 = mongoose.model('Q20',q20Schema);
+// const Q30 = mongoose.model('Q30',q30Schema);
+// module.exports = {Candidate,Admin,q10,q20,Q30};
+module.exports = {
+    q10Schema: mongoose.model('q10', q10Schema),
+    q20Schema: mongoose.model('q20', q20Schema),
+    q30Schema: mongoose.model('q30', q30Schema),
+    candidateSchema: mongoose.model('Candidate', candidateSchema),
+    adminSchema: mongoose.model('Admin', adminSchema)
+};

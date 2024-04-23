@@ -15,14 +15,20 @@ const candidateSchema = new mongoose.Schema({
     email:{
         type:String,
        
+    },
+    phone:{
+        type:Number,
+    },
+    dob:{
+        type:Date,
     }
 });
 const adminSchema = new mongoose.Schema({
-    name:{
+    username:{
         type:String,
        
     },
-    email:{
+    password:{
         type:String,
        
     },
@@ -105,12 +111,20 @@ const q30Schema = new mongoose.Schema({
        
     }
 });
-
+const districtSchema = new mongoose.Schema({
+    districtname:{
+        type:String,
+    },
+    districtcode:{
+        type:Number,
+    }
+});
 
 module.exports = {
     q10Schema: mongoose.model('q10', q10Schema),
     q20Schema: mongoose.model('q20', q20Schema),
     q30Schema: mongoose.model('q30', q30Schema),
     candidateSchema: mongoose.model('Candidate', candidateSchema),
-    adminSchema: mongoose.model('Admin', adminSchema)
+    adminSchema: mongoose.model('Admin', adminSchema),
+    districtSchema: mongoose.model('DistrictName', districtSchema)
 };

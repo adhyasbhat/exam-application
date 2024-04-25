@@ -1,8 +1,8 @@
 const {adminSchema} = require("../../config");
 
-const adminController = {}
+// const adminController = {}
 
-adminController.registerAdmin = async (req, res) => {
+registerAdmin = async (req, res) => {
     try {
         const admin = {
             username: req.body.username,
@@ -16,4 +16,4 @@ adminController.registerAdmin = async (req, res) => {
         res.status(500).send("Error in registering admin: " + error.message);
     }
 }
-module.exports = adminController;
+module.exports = {registerAdmin};

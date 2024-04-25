@@ -1,7 +1,8 @@
 const {candidateSchema } = require("../../config.js");
 const nodemailer = require("nodemailer");
 const candidateController = {}
-
+const jwt = require("jsonwebtoken");
+const jwtPassword = "secret";
 candidateController.registerCandidate = async (req, res) => {
     try{
         const candidate = {
@@ -12,7 +13,8 @@ candidateController.registerCandidate = async (req, res) => {
         };
         const newCandidate = new candidateSchema(candidate);
         await newCandidate.save();
-        res.send("Candidate added successfully");
+        const token = jwt.sign({ email: email }, jwtPassword, { expiresIn: "2h" });
+        return res.status(200).json({ success: "Successfull added candidate", token });
     } catch (error) {
         console.error("Error adding candidate:", error);
     }
@@ -43,7 +45,7 @@ candidateController.sendOTP = async (req, res) => {
           try {
             await transporter.sendMail(mailOptions);
             console.log("mail has been sent!!");
-            res.status(200).json({ message: "mail has been sent"});
+            res.status(200).json({ message: "mail has been sent", status: "success"});
           } catch (error) {
             console.log(error);
           }

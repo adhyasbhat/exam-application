@@ -5,8 +5,10 @@ const questionsRouter = require("./src/Routes/questionsroutes.js");
 const registerCandidate = require("./src/Routes/registerroutes.js");
 const app = express();
 const PORT = process.env.PORT || 5000;
-
+const cors = require("cors");
 app.use(express.json());
+const corsOptions = {origin: "http://localhost:5173"};
+app.use(cors(corsOptions))
 app.use('/api', adminRouter);
 app.use('/api', candidateRouter);
 app.use('/api', questionsRouter);

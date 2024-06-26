@@ -58,21 +58,42 @@ candidateController.sendOTP = async (req, res) => {
       res.status(500).send("Error in finding candidate: " + error.message);
   }
 }
-// candidateController.updateCandidate = async (req, res) => {
-//     try {
-//                 const candidate = await candidateSchema.findOne({ email: req.body.email });
-//                 if (candidate) {
-//                     candidate.phone = req.body.phone;
-//                     candidate.dob = req.body.dob;
-//                     await candidate.save();
-//                     res.send("Candidate updated successfully");
-//                 } else {
-//                     res.status(404).send("Candidate not found");
-//                 }
-//         }
-//         catch (error) {
-//             console.error("Error updating candidate:", error);
-//             res.status(500).send("Error in updating candidate: " + error.message);
-//         }
-// }
+candidateController.updateCandidate = async (req, res) => {
+    try {
+                const candidate = await candidateSchema.findOne({ email: req.body.email });
+                if (candidate) {
+                    candidate.phone = req.body.phone;
+                    candidate.dob = req.body.dob;
+                    candidate.name = req.body.name;
+                    candidate.email = req.body.email;
+                    await candidate.save();
+                    res.send("Candidate updated successfully");
+                } else {
+                    res.status(404).send("Candidate not found");
+                }
+        }
+        catch (error) {
+            console.error("Error updating candidate:", error);
+            res.status(500).send("Error in updating candidate: " + error.message);
+        }
+}
+candidateController.loginCandidate = async (req, res) => {
+    try {
+        const candidate = await candidateSchema.findOne({ email: req.body.email });
+        if (candidate) {
+            if (candidate.password === req.body.password) {
+                const token = jwt.sign({ email: candidate.email }, jwtPassword, { expiresIn: "2h" });
+                res.status(200).json({ success: "Login successfull", token });
+            } else {
+                res.status(401).send("Incorrect password");
+            }
+        } else {
+            res.status(404).send("Candidate not found");
+        }
+    }
+    catch (error) {
+        console.error("Error logging in candidate:", error);
+        res.status(500).send("Error in logging in candidate: " + error.message);
+    }
+}
 module.exports = candidateController;

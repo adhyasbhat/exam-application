@@ -21,6 +21,9 @@ const candidateSchema = new mongoose.Schema({
     },
     dob:{
         type:Date,
+    },
+    password:{
+        type:String,
     }
 });
 const adminSchema = new mongoose.Schema({

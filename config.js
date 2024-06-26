@@ -1,133 +1,126 @@
-const mongoose = require('mongoose');
-const connect = mongoose.connect('mongodb://localhost:27017/Exam');
+const mongoose = require("mongoose");
+const connect = mongoose.connect("mongodb://localhost:27017/Exam");
 
-connect.then(()=>{
-    console.log('Connected to the server');
-})
-.catch(()=>{
-    console.log('Error in connecting to the server');
-})
+connect
+  .then(() => {
+    console.log("Connected to the server");
+  })
+  .catch(() => {
+    console.log("Error in connecting to the server");
+  });
 const candidateSchema = new mongoose.Schema({
-    name:{
-        type:String,
-       
-    },
-    email:{
-        type:String,
-       
-    },
-    phone:{
-        type:Number,
-    },
-    dob:{
-        type:Date,
-    },
-    password:{
-        type:String,
-    }
+  name: {
+    type: String,
+  },
+  email: {
+    type: String,
+  },
+  phone: {
+    type: Number,
+  },
+  dob: {
+    type: Date,
+  },
+  password: {
+    type: String,
+  },
 });
 const adminSchema = new mongoose.Schema({
-    username:{
-        type:String,
-       
-    },
-    password:{
-        type:String,
-       
-    },
+  username: {
+    type: String,
+  },
+  password: {
+    type: String,
+  },
 });
 const q10Schema = new mongoose.Schema({
-    question:{
-        type:String,
-       
-    },
-    option1:{
-        type:String,
-      
-    },
-    option2:{
-        type:String,
-      
-    },
-    option3:{
-        type:String,
-       
-    },
-    option4:{
-        type:String,
-        
-    },
-    answer:{
-        type:String,
-       
-    }
+  question: {
+    type: String,
+  },
+  option1: {
+    type: String,
+  },
+  option2: {
+    type: String,
+  },
+  option3: {
+    type: String,
+  },
+  option4: {
+    type: String,
+  },
+  answer: {
+    type: String,
+  },
 });
 const q20Schema = new mongoose.Schema({
-    question:{
-        type:String,
-       
-    },
-    option1:{
-        type:String,
-       
-    },
-    option2:{
-        type:String,
-       
-    },
-    option3:{
-        type:String,
-       
-    },
-    option4:{
-        type:String,
-       
-    },
-    answer:{
-        type:String,
-       
-    }
+  question: {
+    type: String,
+  },
+  option1: {
+    type: String,
+  },
+  option2: {
+    type: String,
+  },
+  option3: {
+    type: String,
+  },
+  option4: {
+    type: String,
+  },
+  answer: {
+    type: String,
+  },
 });
 const q30Schema = new mongoose.Schema({
-    question:{
-        type:String,
-       
-    },
-    option1:{
-        type:String,
-       
-    },
-    option2:{
-        type:String,
-       
-    },
-    option3:{
-        type:String,
-       
-    },
-    option4:{
-        type:String,
-       
-    },
-    answer:{
-        type:String,
-       
-    }
+  question: {
+    type: String,
+  },
+  option1: {
+    type: String,
+  },
+  option2: {
+    type: String,
+  },
+  option3: {
+    type: String,
+  },
+  option4: {
+    type: String,
+  },
+  answer: {
+    type: String,
+  },
 });
 const districtSchema = new mongoose.Schema({
-    districtname:{
-        type:String,
-    },
-    districtcode:{
-        type:Number,
-    }
+  districtname: {
+    type: String,
+  },
+  districtcode: {
+    type: Number,
+  },
+});
+const slotSchema = new mongoose.Schema({
+  slotdate: { type: Date },
+  batch: { type: String }, // e.g., "10am-11am", "2pm-3pm"
+  maxSlotsPerBatch: { type: Number },
+  availableSlots: { type: Number },
+  slotstatus: { type: String },
+});
+const slotbookingSchema = new mongoose.Schema({
+  districtname: {
+    type: String,
+  },
+  slotData: [slotSchema],
 });
 
 module.exports = {
-    q10Schema: mongoose.model('q10', q10Schema),
-    q20Schema: mongoose.model('q20', q20Schema),
-    q30Schema: mongoose.model('q30', q30Schema),
-    candidateSchema: mongoose.model('Candidate', candidateSchema),
-    adminSchema: mongoose.model('Admin', adminSchema),
-    districtSchema: mongoose.model('DistrictName', districtSchema)
+  q10Schema: mongoose.model("q10", q10Schema),
+  q20Schema: mongoose.model("q20", q20Schema),
+  q30Schema: mongoose.model("q30", q30Schema),
+  candidateSchema: mongoose.model("Candidate", candidateSchema),
+  adminSchema: mongoose.model("Admin", adminSchema),
+  districtSchema: mongoose.model("DistrictName", districtSchema),
+  slotbookingSchema: mongoose.model("SlotBooking", slotbookingSchema),
 };

@@ -62,12 +62,19 @@ candidateController.updateCandidate = async (req, res) => {
     try {
                 const candidate = await candidateSchema.findOne({ email: req.body.email });
                 if (candidate) {
+                  const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
+                  if (passwordRegex.test(req.body.password)) {
                     candidate.phone = req.body.phone;
                     candidate.dob = req.body.dob;
                     candidate.name = req.body.name;
                     candidate.email = req.body.email;
+                    candidate.password = req.body.password;
                     await candidate.save();
                     res.send("Candidate updated successfully");
+                  } else {
+                    res.status(400).send("Password should be atleast 6 characters long and should contain atleast one number, one lowercase and one uppercase letter");
+                  }
+                   
                 } else {
                     res.status(404).send("Candidate not found");
                 }

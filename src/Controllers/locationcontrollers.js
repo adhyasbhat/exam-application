@@ -1,8 +1,8 @@
 const {districtSchema} = require("../../config.js");
 
-const registerController = {}
+const locationController = {}
 
-registerController.addDistrict = async (req, res) => {
+locationController.addDistrict = async (req, res) => {
     try {
         const district = {
           districtname: req.body.districtname,
@@ -16,8 +16,8 @@ registerController.addDistrict = async (req, res) => {
         res.status(500).send("Error in adding district: " + error.message);
       }
 }
-registerController.getDistrict = async (req, res) => {
+locationController.getDistrict = async (req, res) => {
     const district = await districtSchema.find();
   res.send(district);
 }
-module.exports = registerController;
+module.exports = locationController;

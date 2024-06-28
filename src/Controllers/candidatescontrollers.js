@@ -63,6 +63,12 @@ candidateController.updateCandidate = async (req, res) => {
                 const candidate = await candidateSchema.findOne({ email: req.body.email });
                 if (candidate) {
                   const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
+                  if(req.body.password == null || req.body.password == ""){
+                    res.status(400).send("Password cannot be empty");
+                  }
+                  if(req.body.password !=req.body.confirmPassword){
+                    res.status(400).send("Passwords do not match");
+                  }
                   if (passwordRegex.test(req.body.password)) {
                     candidate.phone = req.body.phone;
                     candidate.dob = req.body.dob;

@@ -33,7 +33,7 @@ const adminSchema = new mongoose.Schema({
     type: String,
   },
 });
-const q10Schema = new mongoose.Schema({
+const questionSchema = new mongoose.Schema({
   question: {
     type: String,
   },
@@ -52,47 +52,11 @@ const q10Schema = new mongoose.Schema({
   answer: {
     type: String,
   },
+  category:{
+    type: String,
+  }
 });
-const q20Schema = new mongoose.Schema({
-  question: {
-    type: String,
-  },
-  option1: {
-    type: String,
-  },
-  option2: {
-    type: String,
-  },
-  option3: {
-    type: String,
-  },
-  option4: {
-    type: String,
-  },
-  answer: {
-    type: String,
-  },
-});
-const q30Schema = new mongoose.Schema({
-  question: {
-    type: String,
-  },
-  option1: {
-    type: String,
-  },
-  option2: {
-    type: String,
-  },
-  option3: {
-    type: String,
-  },
-  option4: {
-    type: String,
-  },
-  answer: {
-    type: String,
-  },
-});
+
 const districtSchema = new mongoose.Schema({
   districtname: {
     type: String,
@@ -116,9 +80,7 @@ const slotbookingSchema = new mongoose.Schema({
 });
 
 module.exports = {
-  q10Schema: mongoose.model("q10", q10Schema),
-  q20Schema: mongoose.model("q20", q20Schema),
-  q30Schema: mongoose.model("q30", q30Schema),
+  questionSchema: mongoose.model("Question", questionSchema),
   candidateSchema: mongoose.model("Candidate", candidateSchema),
   adminSchema: mongoose.model("Admin", adminSchema),
   districtSchema: mongoose.model("DistrictName", districtSchema),

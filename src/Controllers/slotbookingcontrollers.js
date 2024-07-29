@@ -1,5 +1,5 @@
 const express = require("express");
-const { slotbookingSchema } = require("../../config");
+const { slotbookingSchema } = require("../Modules/slotbookingModule");
 const slotbookingControllers = {};
 
 // Function to update available slots count

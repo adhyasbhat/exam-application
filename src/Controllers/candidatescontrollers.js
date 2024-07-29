@@ -1,24 +1,29 @@
-const {candidateSchema } = require("../../config.js");
+const Candidate = require("../Modules/candidateModule");
 const nodemailer = require("nodemailer");
-const candidateController = {}
 const jwt = require("jsonwebtoken");
+
+const candidateController = {};
 const jwtPassword = "secret";
+
 candidateController.registerCandidate = async (req, res) => {
-    try{
+    try {
         const candidate = {
             name: req.body.name,
             email: req.body.email,
             phone: req.body.phone,
-            dob: req.body.dob
+            dob: req.body.dob,
+            password: req.body.password,
         };
-        const newCandidate = new candidateSchema(candidate);
+        const newCandidate = new Candidate(candidate);
         await newCandidate.save();
-        const token = jwt.sign({ email: email }, jwtPassword, { expiresIn: "2h" });
-        return res.status(200).json({ success: "Successfull added candidate", token });
+        const token = jwt.sign({ email: req.body.email }, jwtPassword, { expiresIn: "2h" });
+        return res.status(200).json({ success: "Successfully added candidate", token });
     } catch (error) {
         console.error("Error adding candidate:", error);
+        res.status(500).send("Error adding candidate: " + error.message);
     }
-}
+};
+
 candidateController.sendOTP = async (req, res) => {
     try {
         const transporter = nodemailer.createTransport({
@@ -41,72 +46,70 @@ candidateController.sendOTP = async (req, res) => {
           text: "Dear user,\n\nWe've received a request for your OTP",
           html: `<p>Congratulations on progressing in our application process!</p><p> Your OTP for further steps is 1234 </p><p>Thank you,<br>CSG Team</p>`,
         };
-        const sendMail = async (transporter, mailOptions) => {
-          try {
-            await transporter.sendMail(mailOptions);
-            console.log("mail has been sent!!");
-            res.status(200).json({ message: "mail has been sent", status: "success"});
-          } catch (error) {
-            console.log(error);
-          }
-        };
-        sendMail(transporter, mailOptions);
-    
-      
-  } catch (error) {
-      console.error("Error finding candidate:", error);
-      res.status(500).send("Error in finding candidate: " + error.message);
-  }
-}
+        await transporter.sendMail(mailOptions);
+        res.status(200).json({ message: "Mail has been sent", status: "success" });
+    } catch (error) {
+        console.error("Error sending OTP:", error);
+        res.status(500).send("Error sending OTP: " + error.message);
+    }
+};
+
 candidateController.updateCandidate = async (req, res) => {
     try {
-                const candidate = await candidateSchema.findOne({ email: req.body.email });
-                if (candidate) {
-                  const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
-                  if(req.body.password == null || req.body.password == ""){
-                    res.status(400).send("Password cannot be empty");
-                  }
-                  if(req.body.password !=req.body.confirmPassword){
-                    res.status(400).send("Passwords do not match");
-                  }
-                  if (passwordRegex.test(req.body.password)) {
-                    candidate.phone = req.body.phone;
-                    candidate.dob = req.body.dob;
-                    candidate.name = req.body.name;
-                    candidate.email = req.body.email;
-                    candidate.password = req.body.password;
-                    await candidate.save();
-                    res.send("Candidate updated successfully");
-                  } else {
-                    res.status(400).send("Password should be atleast 6 characters long and should contain atleast one number, one lowercase and one uppercase letter");
-                  }
-                   
-                } else {
-                    res.status(404).send("Candidate not found");
-                }
+        const candidate = await Candidate.findOne({ email: req.body.email });
+        if (candidate) {
+            const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
+            if (!req.body.password || !req.body.confirmPassword) {
+                return res.status(400).send("Password fields cannot be empty");
+            }
+            if (req.body.password !== req.body.confirmPassword) {
+                return res.status(400).send("Passwords do not match");
+            }
+            if (passwordRegex.test(req.body.password)) {
+                candidate.phone = req.body.phone;
+                candidate.dob = req.body.dob;
+                candidate.name = req.body.name;
+                candidate.email = req.body.email;
+                candidate.password = req.body.password;
+                candidate.address = req.body.address;
+                candidate.profilepic = req.body.profilepic;
+                candidate.signaturepic = req.body.signaturepic;
+                candidate.resume = req.body.resume;
+                candidate.role = req.body.role;
+                candidate.currentCompany = req.body.currentCompany;
+                candidate.experience = req.body.experience;
+                candidate.gender = req.body.gender;
+                await candidate.save();
+                res.send("Candidate updated successfully");
+            } else {
+                res.status(400).send("Password should be at least 6 characters long and should contain at least one number, one lowercase, and one uppercase letter");
+            }
+        } else {
+            res.status(404).send("Candidate not found");
         }
-        catch (error) {
-            console.error("Error updating candidate:", error);
-            res.status(500).send("Error in updating candidate: " + error.message);
-        }
-}
+    } catch (error) {
+        console.error("Error updating candidate:", error);
+        res.status(500).send("Error updating candidate: " + error.message);
+    }
+};
+
 candidateController.loginCandidate = async (req, res) => {
     try {
-        const candidate = await candidateSchema.findOne({ email: req.body.email });
+        const candidate = await Candidate.findOne({ email: req.body.email });
         if (candidate) {
             if (candidate.password === req.body.password) {
                 const token = jwt.sign({ email: candidate.email }, jwtPassword, { expiresIn: "2h" });
-                res.status(200).json({ success: "Login successfull", token });
+                res.status(200).json({ success: "Login successful", token });
             } else {
                 res.status(401).send("Incorrect password");
             }
         } else {
             res.status(404).send("Candidate not found");
         }
-    }
-    catch (error) {
+    } catch (error) {
         console.error("Error logging in candidate:", error);
-        res.status(500).send("Error in logging in candidate: " + error.message);
+        res.status(500).send("Error logging in candidate: " + error.message);
     }
-}
+};
+
 module.exports = candidateController;

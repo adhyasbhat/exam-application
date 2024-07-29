@@ -1,4 +1,4 @@
-const {adminSchema} = require("../../config");
+const {adminSchema} = require("../Modules/adminModule");
 
 // const adminController = {}
 

@@ -1,7 +1,10 @@
-questions,option1,option2,option3,option4,answer
-Which of the following can read and render HTML web pages,Server,Head tak,Web browser,Empty,Web browser
-Among the following operators identify the one which is used to allocate memory to array variables in JavaScript.,new,new malloc,alloc,malloc,new
-The latest HTML standard is,HTML 4.0,HTML 5.0,XML,SGML,HTML 5.0
-Why were cookies designed?,for server-side programming,for client-side programming,both 1 and 2,none,for server-side programming
-What are variables used in JavaScript programs,varying randomly,"storing numbers, dates and other variables",used as header files,none of the above,"storing numbers, dates and other variables"
-Simple network management protocol uses which of the following port number,164,163,160,161,161
+question,option1,option2,option3,option4,answer,category
+Which is not in MS Word?,Italic,Magic tool,Font, Bold,Magic tool,Ms Word
+____ cannot be used to work in MS Office,Joystick,Scanner,Light Pen,Mouse,Joystick,Ms Word
+Which is not an edition of MS Word?,View tab,Paragraph dialog box,Office Clipboard,All of these,Office Clipboard,Ms Word
+What is the blank space outside the printing area on a page?,Clipart,Margins,Header,Footer,Margins,Ms Word
+Which of the following is an example of page orientation?,Landscape,Subscript,Superscript,A4,Landscape,Ms Word
+Formatting is performed on,Text,Table,Menu, Both (a) and (b), Both (a) and (b),Ms Word
+Which of the following software is used for making a resume?,MS Excel,MS Word,Dev C,Java,MS Word,Ms Word
+Press ____ to open the help window in the MS Word document.,F1,F2,F9,F11,F1,Ms Word
+The ability to combine name and addresses with a standard document is called ________,Document formatting,Database management,Mail merge,Form letters,Mail merge,Ms Word

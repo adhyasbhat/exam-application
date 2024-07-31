@@ -29,4 +29,5 @@ questionsController.getquestion = async (req, res) => {
     const questions = await Questions.find();
     res.send(questions);
 }
+
 module.exports = questionsController;

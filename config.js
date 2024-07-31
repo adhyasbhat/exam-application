@@ -103,10 +103,12 @@ const slotbookingSchema = new mongoose.Schema({
   slotData: [slotSchema],
 });
 
+
 module.exports = {
   questionSchema: mongoose.model("Question", questionSchema),
   candidateSchema: mongoose.model("Candidate", candidateSchema),
   adminSchema: mongoose.model("Admin", adminSchema),
   districtSchema: mongoose.model("DistrictName", districtSchema),
   slotbookingSchema: mongoose.model("SlotBooking", slotbookingSchema),
+  userAnswerSchema: mongoose.model("UserAnswer", userAnswerSchema),
 };

@@ -92,7 +92,18 @@ candidateController.updateCandidate = async (req, res) => {
         res.status(500).send("Error updating candidate: " + error.message);
     }
 };
-
+candidateController.verifyOTP = async (req, res) => {
+    try {
+        if (req.body.otp === "1234") {
+            res.status(200).send("OTP verified successfully");
+        } else {
+            res.status(401).send("Incorrect OTP");
+        }
+    } catch (error) {
+        console.error("Error verifying OTP:", error);
+        res.status(500).send("Error verifying OTP: " + error.message);
+    }
+};
 candidateController.loginCandidate = async (req, res) => {
     try {
         const candidate = await Candidate.findOne({ email: req.body.email });

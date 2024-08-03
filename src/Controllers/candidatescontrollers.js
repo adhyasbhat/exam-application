@@ -35,11 +35,11 @@ candidateController.registerCandidate = async (req, res) => {
           if (!name ||!password || !email || !phone || !dob) {
             console.log(name, email, phone,dob, password);
             console.log("Name,Email,Phone and Dob fields cannot be empty");
-            return res.status(400).send("Name,Email,Phone and Dob fields cannot be empty");
+            return res.status(401).send("Name,Email,Phone and Dob fields cannot be empty");
           }
           if (!passwordRegex.test(password)) {
             console.log("Password should be at least 6 characters long and should contain at least one number, one lowercase, and one uppercase letter");
-            return res.status(400).send("Password should be at least 6 characters long and should contain at least one number, one lowercase, and one uppercase letter");
+            return res.status(402).send("Password should be at least 6 characters long and should contain at least one number, one lowercase, and one uppercase letter");
           }
           console.log("password is valid")
         const salt = await bcrypt.genSalt(10);

@@ -1,16 +1,23 @@
-const mongoose = require('mongoose');
-
-const slotSchema = new mongoose.Schema({
-  slotdate: { type: Date },
-  batch: { type: String }, // e.g., "10am-11am", "2pm-3pm"
-  maxSlotsPerBatch: { type: Number },
-  availableSlots: { type: Number },
-  slotstatus: { type: String },
-});
-const slotbookingSchema = new mongoose.Schema({
-    districtname: {
-      type: String,
+const mongoose=require('mongoose');
+const {Schema}=mongoose;
+const bookingSchema=new Schema({
+    user_id:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User",
+        required:true
     },
-    slotData: [slotSchema],
-  });
-  module.exports = mongoose.model('SlotBooking', slotbookingSchema);
+    date:{
+        type:Date,
+        required:true
+    },
+    time:{
+        type:String,
+        required:true
+       
+    },
+    district:{
+        type:String,
+        required:true 
+    }
+});
+module.exports=mongoose.model('booking',bookingSchema);

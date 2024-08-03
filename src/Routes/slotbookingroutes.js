@@ -1,9 +1,8 @@
-const slotbookingController = require("../Controllers/slotbookingController");
+const {BookSlot,viewBook, getTimeSlots} = require("../Controllers/slotbookingController");
 const express = require("express");
 const router = express.Router();
-
-router.post("/bookslot", slotbookingController.bookSlot);
-router.get("/getslots", slotbookingController.getSlots);
-router.put("/updateslot", slotbookingController.updateSlot);
-router.delete("/deleteslot", slotbookingController.deleteSlot);
+const verifyToken = require("../Services/verifyUser");
+router.post('/insertBook',verifyToken,BookSlot);
+router.get('/getBook/:user_id',viewBook);
+router.post('/getTimeSlot',getTimeSlots)
 module.exports = router;

@@ -14,7 +14,9 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware setup
 app.use(express.json());
-const corsOptions = { origin: "http://localhost:5174" };
+// const corsOptions = { origin: "http://localhost:5174" };
+const corsOptions = { origin: "http://localhost:3000" };
+
 app.use(cors(corsOptions));
 
 // Database connection

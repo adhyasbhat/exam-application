@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 
 const candidateSchema = new mongoose.Schema({
+  booking_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'booking',
+  
+  },
   name: {
     type: String,
   },
@@ -39,7 +44,11 @@ const candidateSchema = new mongoose.Schema({
   },
   resume:{
     type:String,
-  }
+  },
+  adminStatus:{
+    type: String,
+    default: 'pending',
+  },
 }
 );
 

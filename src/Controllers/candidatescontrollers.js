@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const multer  = require('multer')
 const secretKey="adhya";
 const path = require('path');
+const { generateOTP } = "../Servives/candidateservice";
 const candidateController = {};
 const fs = require('fs');
 const storage = multer.diskStorage({
@@ -69,6 +70,8 @@ candidateController.sendOTP = async (req, res) => {
             pass: "uvpesguptqmwcspb",
           },
         });
+        const otp = generateOTP()
+      
         const mailOptions = {
           from: {
             name: "CSG Team",
@@ -77,10 +80,10 @@ candidateController.sendOTP = async (req, res) => {
           to: req.body.email,
           subject: "Verification OTP",
           text: "Dear user,\n\nWe've received a request for your OTP",
-          html: `<p>Congratulations on progressing in our application process!</p><p> Your OTP for further steps is 1234 </p><p>Thank you,<br>CSG Team</p>`,
+          html: `<p>Congratulations on progressing in our application process!</p><p> Your OTP for further steps is ${otp} </p><p>Thank you,<br>CSG Team</p>`,
         };
         await transporter.sendMail(mailOptions);
-        res.status(200).json({ message: "Mail has been sent", status: "success" });
+        res.status(200).json({ message: "Mail has been sent", status: "success",otp:otp });
     } catch (error) {
         console.error("Error sending OTP:", error);
         res.status(500).send("Error sending OTP: " + error.message);
@@ -175,5 +178,30 @@ console.log(secretKey,"secretkey");
         res.status(500).json({ error: 'insertion unsuccessfull' })
     }
 };
+candidateController.candidateView=async(req,res)=>{
 
+  try{
+    const data = await Candidate.find().populate('booking_id');
+    console.log('Populated data:', data);
+    res.json(data);
+
+
+  }catch(err){
+    console.log("error while fetching candidate details", err);
+    res.status(500).json({ error: 'error while fetching candidate details' })
+  }
+}
+candidateController.singleView=async(req,res)=>{
+
+  try{
+    
+ const {user_id}=req.body;
+const data=await Candidate.findById(user_id).populate('booking_id');
+console.log(data)
+res.json(data);
+  }catch(err){
+    console.log("error while fetching candidate details", err);
+    res.status(500).json({ error: 'error while fetching candidate details' })
+  }
+}
 module.exports = {upload,candidateController};

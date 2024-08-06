@@ -189,7 +189,7 @@ const BookSlot = async (req, res) => {
 
         console.log('Slot found:', slot);
 
-        if (slot.bookings >= 3) {
+        if (slot.bookings >= 10) {
             return res.status(400).json({ error: 'Slot is full' });
         }
 
@@ -198,8 +198,15 @@ const BookSlot = async (req, res) => {
 
         const newBooking = new Booking({ user_id, date: parsedDate, time, district });
         await newBooking.save();
+        const updatedCandidate = await Candidate.findOneAndUpdate(
+            { _id: user_id },  // Assuming user_id corresponds to _id in the Candidate model
+            { booking_id: newBooking._id },
+            { new: true, upsert: true }  // Create if not exists
+        );
 
-        res.status(200).json({ message: 'Slot booked successfully', booking: newBooking });
+        res.status(200).json({ message: 'Slot booked successfully', booking: newBooking, candidate: updatedCandidate });
+
+      
     } catch (error) {
         console.error('Error booking slot:', error);
         res.status(500).json({ error: 'Failed to book slot' });

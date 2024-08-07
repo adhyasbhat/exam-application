@@ -1,6 +1,9 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const bodyParser = require('body-parser');
+
+// Parse JSON bodies
 
 // Importing routers
 const adminRouter = require("./src/Routes/adminroutes.js");
@@ -11,7 +14,8 @@ const registerCandidateRouter = require("./src/Routes/locationroutes.js");
 // Create an Express application
 const app = express();
 const PORT = process.env.PORT || 5000;
-
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 // Middleware setup
 app.use(express.json());
 // const corsOptions = { origin: "http://localhost:5174" };

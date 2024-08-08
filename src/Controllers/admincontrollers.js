@@ -1,54 +1,195 @@
-const { adminSchema } = require("../Modules/adminModule");
+const { DeptAdmin, CenterAdmin } = require("../Modules/adminModule");
 const candidateSchema=require("../Modules/candidateModule")
+const secretKey = "test";
+const bcrypt = require('bcrypt');
+const jwt = require("jsonwebtoken");
 
-// const adminController = {}
+const deptAdminController = {}
+const centerAdminController = {}
 
-registerAdmin = async (req, res) => {
+deptAdminController.registerDeptAdmin = async (req, res) => {
   try {
-    const admin = {
-      username: req.body.username,
-      password: req.body.password
-    };
-    const newAdmin = new adminSchema(admin);
-    await newAdmin.save();
-    res.send("Admin registered successfully");
+    const findEmail = await DeptAdmin.findOne({ email });
+    if (findEmail) {
+      console.log("This email is already exist");
+      return res.status(400).json({ error: "email already exits" });
+    }
+    else{
+      const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
+      if (!password || !email ) {
+        return res.status(401).send("Email,Password fields cannot be empty");
+      }
+      if (!passwordRegex.test(password)) {
+        console.log("Password should be at least 6 characters long and should contain at least one number, one lowercase, and one uppercase letter");
+        return res.status(402).send("Password should be at least 6 characters long and should contain at least one number, one lowercase, and one uppercase letter");
+      }
+      const salt = await bcrypt.genSalt(10);
+      const hashPass = await bcrypt.hash(req.body.password, salt);
+
+      const admin = {
+        email: req.body.email,
+        password: hashPass
+      };
+      const newAdmin = new DeptAdmin(admin);
+      await newAdmin.save();
+      res.send("Admin registered successfully");
+    }
+   
   } catch (error) {
     console.error("Error registering admin:", error);
     res.status(500).send("Error in registering admin: " + error.message);
   }
 }
 
+deptAdminController.loginDeptAdmin = async (req, res) => {
+  try {
+    const admin = await DeptAdmin.findOne({ email: req.body.email });
+    if (!admin) {
+      return res.status(400).json({ error: "email does not exits" });
+    }
+    const decryptPassword = await bcrypt.compare(req.body.password, admin.password);
+    if (!decryptPassword) {
+      return res.status(400).json({ error: "password does not exits" });
+    }
+    const idData = admin.id;
+    const token = await jwt.sign({ id: idData }, secretKey);
+    const success = true;
+    res.status(200).json({ success, token, admin });
 
-handleAction = async (req,res) => {
+}
+catch (err) {
+    res.status(500).json({ error: 'insertion unsuccessfull' })
+}
+}
+
+centerAdminController.registerCenterAdmin = async (req, res) => {
+  try {
+    const findEmail = await CenterAdmin.findOne({ email });
+    if (findEmail) {
+      console.log("This email is already exist");
+      return res.status(400).json({ error: "email already exits" });
+    }
+    else{
+      const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
+      if (!password || !email ) {
+        return res.status(401).send("Email,Password fields cannot be empty");
+      }
+      if (!passwordRegex.test(password)) {
+        console.log("Password should be at least 6 characters long and should contain at least one number, one lowercase, and one uppercase letter");
+        return res.status(402).send("Password should be at least 6 characters long and should contain at least one number, one lowercase, and one uppercase letter");
+      }
+      const salt = await bcrypt.genSalt(10);
+      const hashPass = await bcrypt.hash(req.body.password, salt);
+
+      const admin = {
+        email: req.body.email,
+        password: hashPass
+      };
+      const newAdmin = new CenterAdmin(admin);
+      await newAdmin.save();
+      res.send("Admin registered successfully");
+    }
+   
+  } catch (error) {
+    console.error("Error registering admin:", error);
+    res.status(500).send("Error in registering admin: " + error.message);
+  }
+}
+
+centerAdminController.loginCenterAdmin = async (req, res) => {
+  try {
+    const admin = await CenterAdmin.findOne({ email: req.body.email });
+    if (!admin) {
+      return res.status(400).json({ error: "email does not exits" });
+    }
+    const decryptPassword = await bcrypt.compare(req.body.password, admin.password);
+    if (!decryptPassword) {
+      return res.status(400).json({ error: "password does not exits" });
+    }
+    const idData = admin.id;
+    const token = await jwt.sign({ id: idData }, secretKey);
+    const success = true;
+    res.status(200).json({ success, token, admin });
+
+}
+catch (err) {
+    res.status(500).json({ error: 'insertion unsuccessfull' })
+}
+}
+centerAdminController.adminApproval = async (req,res) => {
   const { user_id, action } = req.body;
   try {
-    let adminStatus = '';
 
 
-    if (action === 'accept') {
-      adminStatus = 'accepted';
-    } else if (action === 'reject') {
-      adminStatus = 'rejected';
-    } else {
+    const user_Id=await candidateSchema.findById(user_id);
 
-      return res.status(400).json({ error: 'Invalid action' });
-    }
+    if(user_Id){
+      let adminApproval = '';
 
-    const updateStatus=await candidateSchema.findByIdAndUpdate(
-      user_id,
-      { adminStatus },
-      { new: true }
 
-    );
-    if (!updateStatus) {
-      throw new Error('Candidate not found');
-    }
-
-    res.json({ message: 'Admin status updated successfully' });
+      if (action === 'accept') {
+        adminApproval = 'accepted';
+      } else if (action === 'reject') {
+        adminApproval = 'rejected';
+      } else {
   
+        return res.status(400).json({ error: 'Invalid action' });
+      }
+  
+      await candidateSchema.findByIdAndUpdate(
+        user_id,
+        { adminApproval },
+        { new: true }
+  
+      );
+     
+    res.status(200).json({ message: 'Admin status updated successfully' });
+    
+    }else{
+      res.status(400).json({ message: 'Candidate not found...' });
+    }
+   
   } catch (error) {
     res.status(500).json({ error: 'Internal server error', message: error.message });
   }
 }
 
-module.exports = { registerAdmin, handleAction };
+
+centerAdminController.candidateAttendence=async(req,res)=>{
+  const { user_id, attendence } = req.body;
+  try {
+
+
+    const user_Id=await candidateSchema.findById(user_id);
+
+    if(user_Id){
+      let candidateAttendence = '';
+
+
+      if (attendence === 'present') {
+        candidateAttendence = 'present';
+      } else if (attendence === 'absent') {
+        candidateAttendence = 'absent';
+      } else {
+  
+        return res.status(400).json({ error: 'Invalid action' });
+      }
+  
+      await candidateSchema.findByIdAndUpdate(
+        user_id,
+        { attendence },
+        { new: true }
+  
+      );
+     
+    res.status(200).json({ message: 'Attendence updated successfully' });
+    
+    }else{
+      res.status(400).json({ message: 'Candidate not found...' });
+    }
+   
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error', message: error.message });
+  }
+}
+module.exports = { deptAdminController, centerAdminController };

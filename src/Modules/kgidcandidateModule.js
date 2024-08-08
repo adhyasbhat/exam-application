@@ -1,13 +1,15 @@
 const mongoose = require('mongoose');
 
-const candidateSchema = new mongoose.Schema({
+const KGIDcandidateSchema = new mongoose.Schema({
   booking_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'booking',
-  
   },
   name: {
     type: String,
+  },
+  KGID:{
+    type:Number
   },
   email: {
     type: String,
@@ -18,8 +20,8 @@ const candidateSchema = new mongoose.Schema({
   dob: {
     type: Date,
   },
-  password: {
-    type: String,
+  doj: {
+    type: Date,
   },
   address:{
     type:String,
@@ -36,6 +38,16 @@ const candidateSchema = new mongoose.Schema({
   gender:{
     type:String,
   },
+  grade:{
+    type:String,
+  },
+  department:{
+    type:String,
+  },
+  candidateDistrict:{
+    type:String,
+  },
+
   profilepic:{
     type:String,
   },
@@ -56,4 +68,4 @@ const candidateSchema = new mongoose.Schema({
 }
 );
 
-module.exports = mongoose.model('Candidate', candidateSchema);
+module.exports = mongoose.model('KGIDCandidate', KGIDcandidateSchema);

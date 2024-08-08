@@ -4,7 +4,6 @@ const bookingSchema=new Schema({
     user_id:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"User",
-        required:true
     },
     date:{
         type:Date,

@@ -14,7 +14,7 @@ res.status(401).json({error:"access denied no token provided"})
 
 try{
     const data= await jwt.verify(token,secretCode)//decode
-    console.log(data.id)
+    console.log(data.id,"dataaaaa")
     next();
 }
     

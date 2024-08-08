@@ -10,6 +10,8 @@ const adminRouter = require("./src/Routes/adminroutes.js");
 const candidateRouter = require("./src/Routes/candidatesroutes.js");
 const questionsRouter = require("./src/Routes/questionsroutes.js");
 const registerCandidateRouter = require("./src/Routes/locationroutes.js");
+const slotbookingroutes = require("./src/Routes/slotbookingroutes.js");
+const kgidcandidatesroutes = require("./src/Routes/kgidcandidatesroutes.js");
 
 // Create an Express application
 const app = express();
@@ -27,6 +29,8 @@ app.use(cors(corsOptions));
 mongoose.connect("mongodb://localhost:27017/Exam", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 5000, // Adjust as necessary
+  socketTimeoutMS: 45000 // Adjust as necessary
 }).then(() => {
   console.log("Connected to the server");
 }).catch((error) => {
@@ -38,6 +42,9 @@ app.use('/api', adminRouter);
 app.use('/api', candidateRouter);
 app.use('/api', questionsRouter);
 app.use('/api', registerCandidateRouter);
+app.use('/api', slotbookingroutes);
+app.use('/api', kgidcandidatesroutes);
+
 
 // Start the server
 app.listen(PORT, () => {

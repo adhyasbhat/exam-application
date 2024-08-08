@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const adminSchema = new mongoose.Schema({
+const deptAdminSchema = new mongoose.Schema({
   username: {
     type: String,
   },
@@ -8,5 +8,15 @@ const adminSchema = new mongoose.Schema({
     type: String,
   },
 });
+const centerAdminSchema = new mongoose.Schema({
+  username: {
+    type: String,
+  },
+  password: {
+    type: String,
+  },
+});
+const DeptAdmin = mongoose.model('DeptAdmin', deptAdminSchema);
+const CenterAdmin = mongoose.model('CenterAdmin', centerAdminSchema);
 
-module.exports = mongoose.model('Admin', adminSchema);
+module.exports = { DeptAdmin, CenterAdmin };

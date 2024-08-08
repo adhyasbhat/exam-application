@@ -1,5 +1,4 @@
 const Candidate = require("../Modules/candidateModule");
-
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const multer = require('multer')
@@ -8,6 +7,7 @@ const path = require('path');
 const { sendOTP } = require("../Servives/candidateservice.js");
 const candidateController = {};
 const fs = require('fs');
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     const userFolder = path.join(__dirname, '../uploads/', req.body.email);
@@ -25,6 +25,7 @@ candidateController.registerCandidate = async (req, res) => {
   try {
     console.log("try block")
     const { name, email, phone, dob, password } = req.body;
+    console.log(req.body)
     const findEmail = await Candidate.findOne({ email });
     if (findEmail) {
       console.log("This email is already exist");
@@ -34,15 +35,12 @@ candidateController.registerCandidate = async (req, res) => {
       console.log("new user")
       const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
       if (!name || !password || !email || !phone || !dob) {
-        console.log(name, email, phone, dob, password);
-        console.log("Name,Email,Phone and Dob fields cannot be empty");
         return res.status(401).send("Name,Email,Phone and Dob fields cannot be empty");
       }
       if (!passwordRegex.test(password)) {
         console.log("Password should be at least 6 characters long and should contain at least one number, one lowercase, and one uppercase letter");
         return res.status(402).send("Password should be at least 6 characters long and should contain at least one number, one lowercase, and one uppercase letter");
       }
-      console.log("password is valid")
       const salt = await bcrypt.genSalt(10);
       const hashPass = await bcrypt.hash(password, salt);
 
@@ -120,18 +118,18 @@ candidateController.updateCandidate = async (req, res) => {
   }
 }
 
-candidateController.verifyOTP = async (req, res) => {
-  try {
-    if (req.body.otp === "1234") {
-      res.status(200).send("OTP verified successfully");
-    } else {
-      res.status(401).send("Incorrect OTP");
-    }
-  } catch (error) {
-    console.error("Error verifying OTP:", error);
-    res.status(500).send("Error verifying OTP: " + error.message);
-  }
-};
+// candidateController.verifyOTP = async (req, res) => {
+//   try {
+//     if (req.body.otp === "1234") {
+//       res.status(200).send("OTP verified successfully");
+//     } else {
+//       res.status(401).send("Incorrect OTP");
+//     }
+//   } catch (error) {
+//     console.error("Error verifying OTP:", error);
+//     res.status(500).send("Error verifying OTP: " + error.message);
+//   }
+// };
 candidateController.loginCandidate = async (req, res) => {
   try {
     const candidate = await Candidate.findOne({ email: req.body.email });

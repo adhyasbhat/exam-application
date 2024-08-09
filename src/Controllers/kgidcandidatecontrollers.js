@@ -92,6 +92,8 @@ KGIDCandidateController.updateKGIDCandidate = async (req, res) => {
       candidate.gender = req.body.gender;
       candidate.dob = req.body.dob;
       candidate.doj = req.body.doj;
+      candidate.district = req.body.district;
+      candidate.department = req.body.department;
 
       if (req.files["profilepic"]) {
         candidate.profilepic = req.files["profilepic"][0].path;

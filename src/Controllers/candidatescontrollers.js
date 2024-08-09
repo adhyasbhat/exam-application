@@ -10,7 +10,7 @@ const fs = require('fs');
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    const userFolder = path.join(__dirname, '../uploads/', req.body.email);
+    const userFolder = path.join(__dirname, '../Non KGID Candidate document/', req.body.email);
     fs.mkdirSync(userFolder, { recursive: true });
     cb(null, userFolder);
   },

@@ -12,6 +12,7 @@ const questionsRouter = require("./src/Routes/questionsroutes.js");
 const registerCandidateRouter = require("./src/Routes/locationroutes.js");
 const slotbookingroutes = require("./src/Routes/slotbookingroutes.js");
 const kgidcandidatesroutes = require("./src/Routes/kgidcandidatesroutes.js");
+const candidateresponseroutes = require('./src/Routes/candidateresponseroutes.js')
 
 // Create an Express application
 const app = express();
@@ -44,6 +45,7 @@ app.use('/api', questionsRouter);
 app.use('/api', registerCandidateRouter);
 app.use('/api', slotbookingroutes);
 app.use('/api', kgidcandidatesroutes);
+app.use('/api', candidateresponseroutes);
 
 
 // Start the server

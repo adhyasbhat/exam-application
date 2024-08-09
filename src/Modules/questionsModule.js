@@ -22,6 +22,12 @@ const questionSchema = new mongoose.Schema({
   category: {
     type: String,
   },
+  year: {
+    type: Number,
+  },
+  month:{
+    type:String
+  }
 });
 
 module.exports = mongoose.model('Question', questionSchema);

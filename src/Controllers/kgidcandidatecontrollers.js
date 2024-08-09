@@ -8,7 +8,7 @@ const secretKey = "adhya";
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      const userFolder = path.join(__dirname, '../uploads/', req.body.email);
+      const userFolder = path.join(__dirname, '../KGID Candidate documents/', req.body.email);
       fs.mkdirSync(userFolder, { recursive: true });
       cb(null, userFolder);
     },

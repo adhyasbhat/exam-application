@@ -1,5 +1,6 @@
 const { DeptAdmin, CenterAdmin } = require("../Modules/adminModule");
-const candidateSchema=require("../Modules/candidateModule")
+const Candidate = require('../Modules/candidateModule');
+const KGIDCandidate = require('../Modules/kgidcandidateModule');
 const secretKey = "test";
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
@@ -9,17 +10,17 @@ const centerAdminController = {}
 
 deptAdminController.registerDeptAdmin = async (req, res) => {
   try {
-    const findEmail = await DeptAdmin.findOne({ email });
+    const findEmail = await DeptAdmin.findOne({ email:req.body.email });
     if (findEmail) {
       console.log("This email is already exist");
       return res.status(400).json({ error: "email already exits" });
     }
     else{
       const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
-      if (!password || !email ) {
+      if (!req.body.password || !req.body.email ) {
         return res.status(401).send("Email,Password fields cannot be empty");
       }
-      if (!passwordRegex.test(password)) {
+      if (!passwordRegex.test(req.body.password)) {
         console.log("Password should be at least 6 characters long and should contain at least one number, one lowercase, and one uppercase letter");
         return res.status(402).send("Password should be at least 6 characters long and should contain at least one number, one lowercase, and one uppercase letter");
       }
@@ -64,17 +65,17 @@ catch (err) {
 
 centerAdminController.registerCenterAdmin = async (req, res) => {
   try {
-    const findEmail = await CenterAdmin.findOne({ email });
+    const findEmail = await CenterAdmin.findOne({ email:req.body.email });
     if (findEmail) {
       console.log("This email is already exist");
       return res.status(400).json({ error: "email already exits" });
     }
     else{
       const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
-      if (!password || !email ) {
+      if (!req.body.password || !req.body.email ) {
         return res.status(401).send("Email,Password fields cannot be empty");
       }
-      if (!passwordRegex.test(password)) {
+      if (!passwordRegex.test(req.body.password)) {
         console.log("Password should be at least 6 characters long and should contain at least one number, one lowercase, and one uppercase letter");
         return res.status(402).send("Password should be at least 6 characters long and should contain at least one number, one lowercase, and one uppercase letter");
       }
@@ -117,36 +118,30 @@ catch (err) {
 }
 }
 centerAdminController.adminApproval = async (req,res) => {
-  const { user_id, action } = req.body;
+  const { email, action } = req.body;
   try {
 
 
-    const user_Id=await candidateSchema.findById(user_id);
-
-    if(user_Id){
-      let adminApproval = '';
-
-
-      if (action === 'accept') {
-        adminApproval = 'accepted';
-      } else if (action === 'reject') {
-        adminApproval = 'rejected';
-      } else {
-  
-        return res.status(400).json({ error: 'Invalid action' });
+    const candidate=await Candidate.findOne({email});
+    if(candidate){
+      if(action !== 'approve' && action !== 'reject'){
+        return res.status(400).json({ error: 'Invalid action value' });
       }
-  
-      await candidateSchema.findByIdAndUpdate(
-        user_id,
-        { adminApproval },
-        { new: true }
-  
-      );
-     
-    res.status(200).json({ message: 'Admin status updated successfully' });
-    
+      candidate.adminApproval = action;
+      await candidate.save();
+      return res.status(200).json({ message: 'Approval updated successfully in Candidate' });
     }else{
-      res.status(400).json({ message: 'Candidate not found...' });
+      const candidate=await KGIDCandidate.findOne({email});
+      if(candidate){
+        if(action !== 'approve' && action !== 'reject'){
+          return res.status(400).json({ error: 'Invalid action value' });
+        }
+        candidate.adminApproval = action;
+        await candidate.save();
+        return res.status(200).json({ message: 'Approval updated successfully in KGIDCandidate' });
+      }else{
+        return res.status(400).json({ message: 'Candidate not found in either schema' });
+      }
     }
    
   } catch (error) {
@@ -155,41 +150,39 @@ centerAdminController.adminApproval = async (req,res) => {
 }
 
 
-centerAdminController.candidateAttendence=async(req,res)=>{
-  const { user_id, attendence } = req.body;
+centerAdminController.candidateAttendence = async (req, res) => {
+  const { email, attendence } = req.body;
+
   try {
+    let candidate = await Candidate.findOne({ email });
 
-
-    const user_Id=await candidateSchema.findById(user_id);
-
-    if(user_Id){
-      let candidateAttendence = '';
-
-
-      if (attendence === 'present') {
-        candidateAttendence = 'present';
-      } else if (attendence === 'absent') {
-        candidateAttendence = 'absent';
-      } else {
-  
-        return res.status(400).json({ error: 'Invalid action' });
+    if (candidate) {
+      if (attendence !== 'present' && attendence !== 'absent') {
+        return res.status(400).json({ error: 'Invalid attendance value' });
       }
-  
-      await candidateSchema.findByIdAndUpdate(
-        user_id,
-        { attendence },
-        { new: true }
-  
-      );
-     
-    res.status(200).json({ message: 'Attendence updated successfully' });
-    
-    }else{
-      res.status(400).json({ message: 'Candidate not found...' });
+
+      candidate.attendence = attendence;
+      await candidate.save();
+
+      return res.status(200).json({ message: 'Attendance updated successfully in Candidate' });
+    } else {
+      candidate = await KGIDCandidate.findOne({ email });
+
+      if (candidate) {
+        if (attendence !== 'present' && attendence !== 'absent') {
+          return res.status(400).json({ error: 'Invalid attendance value' });
+        }
+
+        candidate.attendence = attendence;
+        await candidate.save();
+
+        return res.status(200).json({ message: 'Attendance updated successfully in KGIDCandidate' });
+      } else {
+        return res.status(400).json({ message: 'Candidate not found in either schema' });
+      }
     }
-   
   } catch (error) {
     res.status(500).json({ error: 'Internal server error', message: error.message });
   }
-}
+};
 module.exports = { deptAdminController, centerAdminController };

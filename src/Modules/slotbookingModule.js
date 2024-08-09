@@ -1,9 +1,8 @@
 const mongoose=require('mongoose');
 const {Schema}=mongoose;
 const bookingSchema=new Schema({
-    user_id:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"User",
+    email:{
+        type:String,
     },
     date:{
         type:Date,

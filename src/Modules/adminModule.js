@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const deptAdminSchema = new mongoose.Schema({
-  username: {
+  email: {
     type: String,
   },
   password: {
@@ -9,7 +9,7 @@ const deptAdminSchema = new mongoose.Schema({
   },
 });
 const centerAdminSchema = new mongoose.Schema({
-  username: {
+  email: {
     type: String,
   },
   password: {

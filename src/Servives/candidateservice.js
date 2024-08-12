@@ -12,8 +12,8 @@ async function sendOTP(email)
       port: 587,
       secure: false,
       auth: {
-        user: "pokemonpodedex@gmail.com",
-        pass: "uvpesguptqmwcspb",
+        user: "csgtest@csgkarnataka.in",
+        pass: "Testcsg@123",
       },
     });
    
@@ -22,7 +22,7 @@ async function sendOTP(email)
     const mailOptions = {
       from: {
         name: "CSG Team",
-        address: "pokemonpodedex@gmail.com",
+        address: "csgtest@csgkarnataka.in",
       },
       to: email,
       subject: "Verification OTP",

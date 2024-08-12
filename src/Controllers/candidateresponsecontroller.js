@@ -4,19 +4,18 @@ const answerController = {};
 
 answerController.getCandidateResponse = async (req, res) => {
   try {
-    const { email, name, year, month, category,time,accuracy, responses } = req.body;
+    const { email, name, date, category,time,accuracy, responses } = req.body;
 
     // Check if an entry exists for the given email, name, year, and month
-    let existingEntry = await Answer.findOne({ email, name, year, month });
+    let existingEntry = await Answer.findOne({ email, name, date });
 
     if (existingEntry) {
-      return res.status(400).send("Responses already submitted for this month and year.");
+      return res.status(400).send("Responses already submitted for this date.");
     } else {
       const newAnswer = new Answer({
         email,
         name,
-        year,
-        month,
+        date,
         category,
         time,
         accuracy,

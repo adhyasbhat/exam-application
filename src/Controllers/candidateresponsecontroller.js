@@ -10,7 +10,7 @@ answerController.getCandidateResponse = async (req, res) => {
     let existingEntry = await Answer.findOne({ email, name, date });
 
     if (existingEntry) {
-      return res.status(400).send("Responses already submitted for this date.");
+      return res.status(400).json({ error: "Responses already submitted for this date." });
     } else {
       const newAnswer = new Answer({
         email,

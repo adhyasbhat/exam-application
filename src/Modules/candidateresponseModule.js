@@ -29,6 +29,10 @@ const userAnswerSchema = new mongoose.Schema({
   }],
   score: {
     type: Number,
+  },
+  displayResult : {
+    type: String,
+    default: "Not yet"
   }
   });
   module.exports = mongoose.model('UserAnswer', userAnswerSchema);

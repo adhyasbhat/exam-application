@@ -1,6 +1,7 @@
 const { DeptAdmin, CenterAdmin } = require("../Modules/adminModule");
 const Candidate = require('../Modules/candidateModule');
 const KGIDCandidate = require('../Modules/kgidcandidateModule');
+const UserAnswer = require('../Modules/candidateresponseModule');
 const secretKey = "test";
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
@@ -185,4 +186,28 @@ centerAdminController.candidateAttendence = async (req, res) => {
     res.status(500).json({ error: 'Internal server error', message: error.message });
   }
 };
+deptAdminController.viewResultApproval = async (req, res) => {
+  const { email, displayResult } = req.body;
+
+  try {
+    let candidate = await UserAnswer.findOne({ email });
+
+    if (candidate) {
+      if (displayResult !== 'display' && displayResult !== 'withheld') {
+        return res.status(400).json({ error: 'Invalid attendance value' });
+      }
+
+      candidate.displayResult = displayResult;
+      await candidate.save();
+
+      return res.status(200).json({ message: 'View result updated successfully in Candidate' });
+    } else {
+        return res.status(400).json({ message: 'Candidate not found' });
+      
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error', message: error.message });
+  }
+};
+
 module.exports = { deptAdminController, centerAdminController };

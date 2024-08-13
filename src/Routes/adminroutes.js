@@ -10,7 +10,7 @@ router.post("/centeradminregister",centerAdminController.registerCenterAdmin)
 router.post("/centeradminlogin",centerAdminController.loginCenterAdmin)
 router.post("/candidateattendence",centerAdminController.candidateAttendence)
 router.post("/adminapproval",centerAdminController.adminApproval)
-
+router.post("/viewresultapproval",deptAdminController.viewResultApproval)
 
 module.exports = router;
 

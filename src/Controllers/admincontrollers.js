@@ -2,7 +2,7 @@ const { DeptAdmin, CenterAdmin } = require("../Modules/adminModule");
 const Candidate = require('../Modules/candidateModule');
 const KGIDCandidate = require('../Modules/kgidcandidateModule');
 const UserAnswer = require('../Modules/candidateresponseModule');
-const secretKey = "test";
+const secretKey = process.env.JWT_TOKEN;
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 

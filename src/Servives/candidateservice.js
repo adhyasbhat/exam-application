@@ -1,19 +1,22 @@
 const otpGenerator = require('otp-generator')
 const nodemailer = require("nodemailer");
+require('dotenv').config();
+
 function generateOTP(){
     const otp = otpGenerator.generate(4, { upperCaseAlphabets: false, specialChars: false,lowerCaseAlphabets:false });
     return otp;
 }
 async function sendOTP(email)
 {
+  console.log(process.env.EMAIL,process.env.PASSWORD)
     const transporter = nodemailer.createTransport({
       service: "gmail",
       host: "smtp.gmail.com",
       port: 587,
       secure: false,
       auth: {
-        user: "csgtest@csgkarnataka.in",
-        pass: "Testcsg@123",
+        user: process.env.EMAIL,
+        pass: process.env.PASSWORD,
       },
     });
    
@@ -22,7 +25,7 @@ async function sendOTP(email)
     const mailOptions = {
       from: {
         name: "CSG Team",
-        address: "csgtest@csgkarnataka.in",
+        address: process.env.EMAIL,
       },
       to: email,
       subject: "Verification OTP",

@@ -2,11 +2,13 @@ const Candidate = require("../Modules/candidateModule");
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const multer = require('multer')
-const secretKey = "adhya";
+require('dotenv').config();
+const secretKey = process.env.JWT_TOKEN;
 const path = require('path');
 const { sendOTP } = require("../Servives/candidateservice.js");
 const candidateController = {};
 const fs = require('fs');
+const e = require("express");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -141,12 +143,13 @@ candidateController.loginCandidate = async (req, res) => {
       return res.status(400).json({ error: "password does not exits" });
     }
     const idData = candidate.id;
+    console.log(secretKey,"secretKey")
     const token = await jwt.sign({ id: idData }, secretKey);
     const success = true;
     res.status(200).json({ success, token, candidate });
 
   } catch (err) {
-    res.status(500).json({ error: 'insertion unsuccessfull' })
+    res.status(500).json({ error: err.message });
   }
 };
 candidateController.candidateView = async (req, res) => {

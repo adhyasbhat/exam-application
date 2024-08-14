@@ -4,7 +4,8 @@ const path = require('path');
 const KGIDCandidateController = {};
 const multer = require('multer')
 const jwt = require("jsonwebtoken");
-const secretKey = "adhya";
+require('dotenv').config();
+const secretKey = process.env.JWT_TOKEN;
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {

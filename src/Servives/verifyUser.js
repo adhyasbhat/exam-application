@@ -1,7 +1,8 @@
 const express = require('express')
 const app = express();
 const jwt=require('jsonwebtoken')
-const secretCode="adhya";
+require('dotenv').config();
+const secretCode=process.env.JWT_TOKEN;
 
 const verifyToken=async(req, res, next) => {
  

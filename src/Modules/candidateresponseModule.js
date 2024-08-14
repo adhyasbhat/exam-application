@@ -1,38 +1,50 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const userAnswerSchema = new mongoose.Schema({
   email: {
     type: String,
-    required: true
+    required: true,
   },
   name: {
     type: String,
-    required: true
+    required: true,
   },
- date:{
+  date: {
     type: Date,
-    default: Date.now
- },
+    default: Date.now,
+  },
   category: {
     type: String,
-    required: true
+    required: true,
   },
-  time:{
-    type:String,
+  time: {
+    type: String,
   },
-  accuracy:{
-    type:Number
+  accuracy: {
+    type: Number,
   },
-  responses: [{
-    question: String,
-    answer: String,
-    correctAnswer: String,
-  }],
+  responses: [
+    {
+      question: String,
+      answer: String,
+      correctAnswer: String,
+    },
+  ],
   score: {
     type: Number,
   },
-  displayResult : {
+  displayResult: {
     type: String,
-    default: "Not yet"
-  }
-  });
-  module.exports = mongoose.model('UserAnswer', userAnswerSchema);
+    default: "Not yet",
+  },
+  totalQuestions: {
+    type: Number,
+  },
+
+  attendedQuestions: {
+    type: Number,
+  },
+  wrongAnswers: {
+    type: Number,
+  },
+});
+module.exports = mongoose.model("UserAnswer", userAnswerSchema);

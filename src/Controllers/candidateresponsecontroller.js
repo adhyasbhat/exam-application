@@ -12,6 +12,9 @@ answerController.getCandidateResponse = async (req, res) => {
     if (existingEntry) {
       return res.status(400).json({ error: "Responses already submitted for this date." });
     } else {
+      const totalQuestions = responses.length;
+      const attendedQuestions = responses.filter(response => response.answer !== "").length;
+      const wrongAnswers = responses.filter(response => response.answer !== response.correctAnswer).length;
       const newAnswer = new Answer({
         email,
         name,
@@ -20,7 +23,10 @@ answerController.getCandidateResponse = async (req, res) => {
         time,
         accuracy,
         responses,
-        score: calculateScore(responses)
+        score: calculateScore(responses),
+        totalQuestions,
+        attendedQuestions,
+        wrongAnswers
       });
       await newAnswer.save();
     }

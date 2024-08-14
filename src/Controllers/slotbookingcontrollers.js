@@ -54,7 +54,7 @@ const BookSlot = async (req, res) => {
         if (findEmailwithoutKGID) {
             updateCandidate = await Candidate.findOneAndUpdate(
                 { email: email },
-                { newBooking: newBooking },
+                { $set:{booking_id: newBooking._id}},
                 { new: true, upsert: true }  // Create if not exists
             );
         }
@@ -62,7 +62,7 @@ const BookSlot = async (req, res) => {
         if (findEmailwithKGID) {
             updateCandidate = await KGIDCandidate.findOneAndUpdate(
                 { email: email },
-                { newBooking: newBooking },
+                { $set:{booking_id: newBooking._id}},
                 { new: true, upsert: true }  // Create if not exists
             );
         }

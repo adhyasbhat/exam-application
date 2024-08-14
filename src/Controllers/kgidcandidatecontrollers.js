@@ -1,4 +1,5 @@
 const  KGIDCandidate  = require("../Modules/kgidcandidateModule");
+
 const fs = require('fs');
 const path = require('path');
 const KGIDCandidateController = {};
@@ -112,9 +113,9 @@ KGIDCandidateController.updateKGIDCandidate = async (req, res) => {
     res.status(500).json({ error: "insertion unsuccessfull" });
   }
 };
-KGIDCandidateController.candidateView = async (req, res) => {
+KGIDCandidateController.candidateBookedView = async (req, res) => {
   try {
-    const data = await KGIDCandidate.find().populate("booking_id");
+    const data = await KGIDCandidate.find({ booking_id: { $ne: null } }).populate('booking_id')
     console.log("Populated data:", data);
     res.json(data);
   } catch (err) {

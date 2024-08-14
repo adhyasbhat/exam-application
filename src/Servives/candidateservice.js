@@ -6,7 +6,7 @@ function generateOTP(){
     const otp = otpGenerator.generate(4, { upperCaseAlphabets: false, specialChars: false,lowerCaseAlphabets:false });
     return otp;
 }
-async function sendOTP(email)
+async function sendOTP(email,message)
 {
   console.log(process.env.EMAIL,process.env.PASSWORD)
     const transporter = nodemailer.createTransport({
@@ -30,7 +30,7 @@ async function sendOTP(email)
       to: email,
       subject: "Verification OTP",
       text: "Dear user,\n\nWe've received a request for your OTP",
-      html: `<p>Congratulations on progressing in our application process!</p><p> Your OTP for further steps is ${otp} </p><p>Thank you,<br>CSG Team</p>`,
+      html: `<p>${message} ${otp} </p><p>Thank you,<br>CSG Team</p>`,
     };
     await transporter.sendMail(mailOptions);
     return otp

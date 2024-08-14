@@ -12,8 +12,7 @@ router.post("/registerCandidate", candidateController.registerCandidate);
 router.post("/loginCandidate", candidateController.loginCandidate);
 router.put('/update-candidate', cpUpload, candidateController.updateCandidate);
 router.post("/sendOTP", candidateController.sendOTP);
-// router.post("/verifyOTP", candidateController.verifyOTP);
-router.get("/getCandidates",candidateController.candidateView);
-router.get("/getSingleCandidate",candidateController.singleView)
+router.get("/getCandidates",candidateController.candidateView);// get candidate deatils who have booked slots
+router.post("/getSingleCandidate",candidateController.singleView); // get candidate deatils by id who have booked 
 
 module.exports = router;

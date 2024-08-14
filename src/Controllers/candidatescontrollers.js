@@ -60,7 +60,8 @@ candidateController.registerCandidate = async (req, res) => {
 
 candidateController.sendOTP = async (req, res) => {
   try {
-    const otp = await sendOTP(req.body.email);
+    const message = "Please enter the following OTP to verify your email: ";
+    const otp = await sendOTP(req.body.email,message);
     res.status(200).json({ message: "Mail has been sent", otp: otp, });
   } catch (error) {
     console.error("Error sending OTP:", error);
@@ -155,7 +156,7 @@ candidateController.loginCandidate = async (req, res) => {
 candidateController.candidateView = async (req, res) => {
 
   try {
-    const data = await Candidate.find().populate('booking_id');
+    const data = await Candidate.find({booking_id:{$ne:null}}).populate('booking_id');
     console.log('Populated data:', data);
     res.json(data);
 
